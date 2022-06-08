@@ -6,7 +6,8 @@
 #include <regex>
 
 const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list {
-    {std::regex("^i32[^a-zA-Z0-9]"), INT32 },
+    {std::regex("^ "), WHITE_SPACE},
+    {std::regex("^(i32)[^a-zA-Z0-9]"), INT32 },
     {std::regex("^u32[^a-zA-Z0-9]"), UINT32 },
     {std::regex("^i64[^a-zA-Z0-9]"), INT64 },
     {std::regex("^u64[^a-zA-Z0-9]"), UINT64 },
@@ -74,7 +75,7 @@ TokenList tokenizer(std::fstream &file)
 
         std::cout << line_pos << "-- \n\t";
         size_t max_lenght;
-        for (col_pos = 0, max_lenght = current_line.length(); col_pos <= max_lenght; col_pos++)
+        for (col_pos = 0, max_lenght = current_line.length(); col_pos < max_lenght; col_pos++)
         {
             current_char = current_line[col_pos];
             std::cout << " '" << current_char << "' " << col_pos << ' ';
@@ -85,6 +86,7 @@ TokenList tokenizer(std::fstream &file)
                 std::regex_search(&current_line[col_pos], matches, reg_val);
                 if (!matches.empty())
                 {
+                    if (cat == WHITE_SPACE) break;
                     std::cout << matches.str(0);
                     size_t match_size = matches.str(0).size();
                     if (matches.str(0)[match_size-1] == ' ')
