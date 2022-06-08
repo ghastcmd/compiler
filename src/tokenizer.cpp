@@ -13,6 +13,9 @@ TokenList tokenizer(std::fstream &file)
     for (line_pos = 0; std::getline(file, current_line); line_pos++)
     {
         char current_char = current_line[0];
+
+        printf("%4d  %s\n", (int)line_pos, current_line.c_str());
+
         std::cout << line_pos << "-- \n\t";
         size_t max_lenght;
         for (col_pos = 0, max_lenght = current_line.length(); col_pos <= max_lenght; col_pos++)
