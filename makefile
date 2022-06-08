@@ -13,7 +13,7 @@ endef
 sources = $(wildcard src/*.cpp)
 objects = $(patsubst %,bin/%.o,$(basename $(notdir $(sources))))
 
-CC = clang++
+CC = clang++ -std=c++20
 SS = @
 obj = bin
 dep_dir = $(obj)/deps

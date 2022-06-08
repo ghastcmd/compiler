@@ -23,5 +23,6 @@ int main(int argc, char **argv)
     }
     
     auto token_list = tokenizer(file);
-    token_list.nextToken();
+    auto token = token_list.nextToken();
+    token.print();
 }
