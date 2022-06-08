@@ -1,4 +1,6 @@
 fn i32 main()
 {
     printf("Hello world!\n");
+    str string = "the end";
+    str another_string = string .. " of the world"+1;
 }

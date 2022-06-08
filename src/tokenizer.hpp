@@ -12,6 +12,16 @@ struct TokenList
     {
     }
 
+    auto begin()
+    {
+        return m_deque.begin();
+    }
+
+    auto end()
+    {
+        return m_deque.end();
+    }
+
     Token nextToken()
     {
         const auto token = m_deque.front();

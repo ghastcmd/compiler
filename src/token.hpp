@@ -17,6 +17,10 @@ enum TokenCategory
     CHAR,
     STRING,
     BOOLEAN,
+    INT_LITERAL,
+    FLOAT_LITERAL,
+    CHAR_LITERAL,
+    STRING_LITERAL,
     TRUE_CODE,
     FALSE_CODE,
     NEGATION_OP,
@@ -65,7 +69,7 @@ public:
     {
     }
 
-   void print();
+   void print() const;
 
 private:
     enum TokenCategory m_cat;
