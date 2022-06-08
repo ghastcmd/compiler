@@ -28,11 +28,11 @@ endif
 build: $(ffl) $(target)
 
 run: build
-	$(SS)$(target)
+	$(SS)$(target) test.ng
 
 VPATH = src
 bin/%.o: %.cpp
-	$(SS)$(CC) -c $< -o $@ -MMD -MT $@ -MP -MF $(dep_dir)/$(notdir $*).d
+	$(SS)$(CC) -Wall -Werror -c $< -o $@ -MMD -MT $@ -MP -MF $(dep_dir)/$(notdir $*).d
 
 include $(wildcard $(dep_dir)/*.d)
 
