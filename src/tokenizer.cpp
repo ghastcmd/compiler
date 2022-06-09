@@ -42,8 +42,8 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_symbols
 
 const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_words
 {
-    {std::regex("^(-)?[0-9]+\\.[0-9]+[^a-zA-Z0-9\\.]"), FLOAT_LITERAL },
-    {std::regex("^(-)?[0-9]+[^a-zA-Z0-9\\.]"), INT_LITERAL },
+    {std::regex("^-?[0-9]+\\.[0-9]+[^a-zA-Z0-9\\.]"), FLOAT_LITERAL },
+    {std::regex("^-?[0-9]+[^a-zA-Z0-9\\.]"), INT_LITERAL },
     {std::regex("^i32[^a-zA-Z0-9]"), INT32 },
     {std::regex("^u32[^a-zA-Z0-9]"), UINT32 },
     {std::regex("^i64[^a-zA-Z0-9]"), INT64 },
