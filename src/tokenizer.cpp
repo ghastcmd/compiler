@@ -57,6 +57,8 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_words
     {std::regex("^false[^a-zA-Z0-9]"), FALSE_CODE },
     {std::regex("^as "), CAST_OP },
     {std::regex("^main[^a-zA-Z0-9]"), MAIN_CODE },
+    {std::regex("^printf[^a-zA-Z0-9]"), PRINTF_CODE },
+    {std::regex("^read[^a-zA-Z0-9]"), READ_CODE },
     {std::regex("^return[^a-zA-Z0-9]"), RETURN_CODE },
     {std::regex("^fn[^a-zA-Z0-9]"), FN_CODE },
     {std::regex("^if[^a-zA-Z0-9]"), IF_CODE },

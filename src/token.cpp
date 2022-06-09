@@ -39,6 +39,8 @@ std::unordered_map<TokenCategory, std::string> token_names = {
     { GTEQ_OP,"GTEQ_OP" },
     { LTEQ_OP,"LTEQ_OP" },
     { MAIN_CODE,"MAIN_CODE" },
+    { PRINTF_CODE, "PRINTF_CODE" },
+    { READ_CODE, "READ_CODE" },
     { RETURN_CODE,"RETURN_CODE" },
     { FN_CODE,"FN_CODE" },
     { IF_CODE,"IF_CODE" },

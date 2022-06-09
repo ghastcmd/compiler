@@ -43,6 +43,8 @@ enum TokenCategory
     GTEQ_OP,
     LTEQ_OP,
     MAIN_CODE,
+    PRINTF_CODE,
+    READ_CODE,
     RETURN_CODE,
     FN_CODE,
     IF_CODE,
