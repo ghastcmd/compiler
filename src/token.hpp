@@ -6,7 +6,7 @@
 
 enum TokenCategory
 {
-    END_OF_FILE = -1,
+    END_OF_FILE,
     WHITE_SPACE,
     IDENTIFIER,
     INT32,

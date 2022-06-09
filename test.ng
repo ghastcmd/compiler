@@ -3,4 +3,5 @@ fn i32 main()
     printf("Hello world!\n");
     str string = "the end";
     str another_string = string .. " of the world"+1;
+    i64 one_number = 12332.32323;
 }
