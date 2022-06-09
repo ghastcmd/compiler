@@ -65,12 +65,16 @@ enum TokenCategory
 struct Token
 {
 public:
+    Token() {}
+
     Token(TokenCategory cat, size_t line, size_t col, std::string lex)
         : m_cat(cat), m_line(line), m_col(col), m_lex(lex)
     {
     }
 
-   void print() const;
+    void print() const;
+
+    TokenCategory cat() const;
 
 private:
     enum TokenCategory m_cat;

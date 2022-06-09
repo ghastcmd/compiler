@@ -63,3 +63,8 @@ void Token::print() const
     printf("          [%04d, %04d] (%04d, %20s) {%s}\n",
         (int)m_line, (int)m_col, m_cat, token_names[m_cat].c_str(), m_lex.c_str());
 }
+
+TokenCategory Token::cat() const
+{
+    return m_cat;
+}

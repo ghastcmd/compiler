@@ -25,7 +25,10 @@ struct TokenList
     Token nextToken()
     {
         const auto token = m_deque.front();
-        m_deque.erase(m_deque.begin());
+        if (token.cat() != END_OF_FILE)
+        {
+            m_deque.erase(m_deque.begin());
+        }
         return token;
     }
 
