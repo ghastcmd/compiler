@@ -141,6 +141,6 @@ TokenList tokenizer(std::fstream &file)
         std::cout << '\n';
     }
 
-    token_list.push_back({END_OF_FILE, line_pos, col_pos, std::string("")});
+    token_list.push_back({END_OF_FILE, line_pos-1, col_pos, std::string("")});
     return {token_list};
 }
