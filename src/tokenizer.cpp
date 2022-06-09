@@ -55,7 +55,7 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_words
     {std::regex("^bool[^a-zA-Z0-9]"), BOOLEAN },
     {std::regex("^true[^a-zA-Z0-9]"), TRUE_CODE },
     {std::regex("^false[^a-zA-Z0-9]"), FALSE_CODE },
-    {std::regex("^as "), CAST_OP },
+    {std::regex("^as[ ]"), CAST_OP },
     {std::regex("^main[^a-zA-Z0-9]"), MAIN_CODE },
     {std::regex("^printf[^a-zA-Z0-9]"), PRINTF_CODE },
     {std::regex("^read[^a-zA-Z0-9]"), READ_CODE },
@@ -67,12 +67,12 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_words
     {std::regex("^for[^a-zA-Z0-9]"), FOR_CODE },
 };
 
-std::pair<std::regex, enum TokenCategory> reg_white_space = {std::regex("^ "), WHITE_SPACE};
-
-
 TokenList tokenizer(std::fstream &file)
 {
     std::deque<Token> token_list;
+
+    std::regex reg_comment ("^//");
+    std::regex reg_white_space ("^ ");
 
     std::string current_line;
     size_t line_pos, col_pos;
@@ -84,10 +84,17 @@ TokenList tokenizer(std::fstream &file)
         for (col_pos = 0, max_lenght = current_line.length(); col_pos < max_lenght; col_pos++)
         {
             std::cmatch matches;
-            
+
             {
-                const auto &[reg_val, cat] = reg_white_space;
-                std::regex_search(&current_line[col_pos], matches, reg_val);
+                std::regex_search(&current_line[col_pos], matches, reg_comment);
+                if (!matches.empty())
+                {
+                    break;
+                }
+            }
+
+            {
+                std::regex_search(&current_line[col_pos], matches, reg_white_space);
                 if (!matches.empty())
                 {
                     continue;
