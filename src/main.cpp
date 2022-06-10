@@ -15,20 +15,42 @@ int main(int argc, char **argv)
         usage(argv[0]);
     }
 
-    Tokenizer tokenizer (argv[1]);
+#if 1
 
-    if (!tokenizer.is_open())
+    Tokenizer tknizer (argv[1]);
+
+    if (!tknizer.is_open())
     {
         return -1;
     }
-    
+
     Token token;
     do
     {
-        token = tokenizer.nextToken();
+        token = tknizer.nextToken();
         token.print();
     }
     while (token.cat() != END_OF_FILE);
+
+#else
+
+    std::fstream file(argv[1]);
+    if (!file.is_open())
+    {
+        std::cerr << "file does not exists\n";
+    }
+    
+    auto token_list = tokenizer(file);
+
+    Token token;
+    do
+    {
+        token = token_list.nextToken();
+        token.print();
+    }
+    while (token.cat() != END_OF_FILE);
+
+#endif
 
     return 0;
 }

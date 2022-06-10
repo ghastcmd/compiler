@@ -172,7 +172,7 @@ auto Tokenizer::get_line()
 
 Token Tokenizer::nextToken()
 {
-    if (m_token_list.size() == 0)
+    while (m_token_list.size() == 0)
     {
         analyse_line();
     }

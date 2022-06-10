@@ -1,11 +1,26 @@
+fn i64 fibonacci(i64 n)                            
+{     	                                    
+    if (n == 1) {
+        return 1;
+    }
+    else {                                    
+        if (n == 2) {
+            return 1;
+        }
+        else {
+            return fibonacci(n - 1) + fibonacci(n - 2);
+        }
+    }
+}
+
 fn i32 main()
 {
-    i32 main_ = 0 as (i32);
-    printf("Hello world!\n");
-    i32 value = 10;
-    i64 another_value = value as i64;
-    str string = "the end";
-    str another_string = string .. " of the world"+1;
-    char ch = '32';
-    i64 one!number = -12332-.323 - 23.3a & @; // this is some comment
+    i64 n;
+    i64 result;
+    printf("Digite um número: ");
+    read(n);
+    printf("Numero de Fibonacci:\n");
+    result = fibonacci(n);
+    printf("%d\n", result);
+    return 0;
 }
