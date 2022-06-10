@@ -22,8 +22,6 @@ int main(int argc, char **argv)
         return -1;
     }
     
-    std::cout << "Hello world!\n";
-
     Token token;
     do
     {
