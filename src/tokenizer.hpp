@@ -36,4 +36,10 @@ private:
     std::deque<Token> m_deque;
 };
 
+struct Tokenizer
+{
+    Tokenizer(std::fstream &file);
+    Token nextToken();
+};
+
 TokenList tokenizer(std::fstream &file);
