@@ -1,9 +1,11 @@
 fn i32 main()
 {
+    i32 main_ = 0 as (i32);
     printf("Hello world!\n");
     i32 value = 10;
     i64 another_value = value as i64;
     str string = "the end";
     str another_string = string .. " of the world"+1;
-    i64 one_number = -12332.32323; // this is some comment
+    char ch = '32';
+    i64 one!number = -12332-.323 - 23.3a & @; // this is some comment
 }

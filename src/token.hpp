@@ -1,8 +1,6 @@
 #pragma once
 
-#include <iostream>
 #include <string>
-#include <unordered_map>
 
 enum TokenCategory
 {
@@ -60,8 +58,10 @@ enum TokenCategory
     COMMA,
     COLON,
     SEMICOLON,
-    QUOTE,
-    APOSTROPHE,
+
+    ERR_NUMBER_LITERAL,
+    ERR_SYMBOL,
+    ERR_CHAR,
 };
 
 struct Token

@@ -7,7 +7,7 @@
 
 const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_symbols
 {
-    {std::regex("^\'[^']*\'"), CHAR_LITERAL },
+    {std::regex("^\'[^']\'"), CHAR_LITERAL },
     {std::regex("^\"[^\"]*\""), STRING_LITERAL },
     {std::regex("^\\.\\."), CONCAT_OP },
     {std::regex("^\\^"), LENGTH_OP },
@@ -35,36 +35,40 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_symbols
     {std::regex("^,"), COMMA },
     {std::regex("^:"), COLON },
     {std::regex("^;"), SEMICOLON },
-    {std::regex("^\""), QUOTE },
-    {std::regex("^'"), APOSTROPHE },
     {std::regex("^[a-zA-Z][a-zA-Z0-9_]*"), IDENTIFIER },
 };
 
 const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_words
 {
-    {std::regex("^-?[0-9]+\\.[0-9]+[^a-zA-Z0-9\\.]"), FLOAT_LITERAL },
-    {std::regex("^-?[0-9]+[^a-zA-Z0-9\\.]"), INT_LITERAL },
-    {std::regex("^i32[^a-zA-Z0-9]"), INT32 },
-    {std::regex("^u32[^a-zA-Z0-9]"), UINT32 },
-    {std::regex("^i64[^a-zA-Z0-9]"), INT64 },
-    {std::regex("^u64[^a-zA-Z0-9]"), UINT64 },
-    {std::regex("^f32[^a-zA-Z0-9]"), FLOAT32 },
-    {std::regex("^f64[^a-zA-Z0-9]"), FLOAT64 },
-    {std::regex("^char[^a-zA-Z0-9]"), CHAR },
-    {std::regex("^str[^a-zA-Z0-9]"), STRING },
-    {std::regex("^bool[^a-zA-Z0-9]"), BOOLEAN },
-    {std::regex("^true[^a-zA-Z0-9]"), TRUE_CODE },
-    {std::regex("^false[^a-zA-Z0-9]"), FALSE_CODE },
+    {std::regex("^[0-9]+\\.[0-9]+[^a-zA-Z0-9\\._]"), FLOAT_LITERAL },
+    {std::regex("^[0-9]+[^a-zA-Z0-9\\._]"), INT_LITERAL },
+    {std::regex("^i32[^a-zA-Z0-9_]"), INT32 },
+    {std::regex("^u32[^a-zA-Z0-9_]"), UINT32 },
+    {std::regex("^i64[^a-zA-Z0-9_]"), INT64 },
+    {std::regex("^u64[^a-zA-Z0-9_]"), UINT64 },
+    {std::regex("^f32[^a-zA-Z0-9_]"), FLOAT32 },
+    {std::regex("^f64[^a-zA-Z0-9_]"), FLOAT64 },
+    {std::regex("^char[^a-zA-Z0-9_]"), CHAR },
+    {std::regex("^str[^a-zA-Z0-9_]"), STRING },
+    {std::regex("^bool[^a-zA-Z0-9_]"), BOOLEAN },
+    {std::regex("^true[^a-zA-Z0-9_]"), TRUE_CODE },
+    {std::regex("^false[^a-zA-Z0-9_]"), FALSE_CODE },
     {std::regex("^as[ ]"), CAST_OP },
-    {std::regex("^main[^a-zA-Z0-9]"), MAIN_CODE },
-    {std::regex("^printf[^a-zA-Z0-9]"), PRINTF_CODE },
-    {std::regex("^read[^a-zA-Z0-9]"), READ_CODE },
-    {std::regex("^return[^a-zA-Z0-9]"), RETURN_CODE },
-    {std::regex("^fn[^a-zA-Z0-9]"), FN_CODE },
-    {std::regex("^if[^a-zA-Z0-9]"), IF_CODE },
-    {std::regex("^else[^a-zA-Z0-9]"), ELSE_CODE },
-    {std::regex("^while[^a-zA-Z0-9]"), WHILE_CODE },
-    {std::regex("^for[^a-zA-Z0-9]"), FOR_CODE },
+    {std::regex("^main[^a-zA-Z0-9_]"), MAIN_CODE },
+    {std::regex("^printf[^a-zA-Z0-9_]"), PRINTF_CODE },
+    {std::regex("^read[^a-zA-Z0-9_]"), READ_CODE },
+    {std::regex("^return[^a-zA-Z0-9_]"), RETURN_CODE },
+    {std::regex("^fn[^a-zA-Z0-9_]"), FN_CODE },
+    {std::regex("^if[^a-zA-Z0-9_]"), IF_CODE },
+    {std::regex("^else[^a-zA-Z0-9_]"), ELSE_CODE },
+    {std::regex("^while[^a-zA-Z0-9_]"), WHILE_CODE },
+    {std::regex("^for[^a-zA-Z0-9_]"), FOR_CODE },
+};
+
+const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_errors
+{
+    {std::regex("^[0-9.][0-9\\.a-zA-Z]*"), ERR_NUMBER_LITERAL},
+    {std::regex("^\'[^']*\'"), ERR_CHAR},
 };
 
 TokenList tokenizer(std::fstream &file)
@@ -133,9 +137,27 @@ TokenList tokenizer(std::fstream &file)
                 }
             }
 
+            if (found) continue;
+
+            for (const auto &[reg_val, cat] : reg_list_errors)
+            {
+                std::regex_search(&current_line[col_pos], matches, reg_val);
+                if (!matches.empty())
+                {
+                    size_t match_size = matches.str(0).size() - 1;
+                    token_list.push_back({cat, line_pos, col_pos, matches.str(0)});
+                    col_pos += match_size;
+
+                    found = true;
+                    break;
+                }
+            }
+
             if (!found)
             {
-                std::cout << "Lexer error\n";
+                std::string to_insert (1, current_line[col_pos]);
+                token_list.push_back({ERR_SYMBOL, line_pos, col_pos, to_insert});
+                col_pos += 1;
             }
         }
         std::cout << '\n';

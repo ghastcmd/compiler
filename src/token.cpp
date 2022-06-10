@@ -1,6 +1,7 @@
 #include "token.hpp"
 
 #include <unordered_map>
+#include <stdio.h>
 
 std::unordered_map<TokenCategory, std::string> token_names = {
     { END_OF_FILE,"END_OF_FILE" },
@@ -56,8 +57,10 @@ std::unordered_map<TokenCategory, std::string> token_names = {
     { COMMA,"COMMA" },
     { COLON,"COLON" },
     { SEMICOLON,"SEMICOLON" },
-    { QUOTE,"QUOTE" },
-    { APOSTROPHE,"APOSTROPHE" },
+
+    {ERR_NUMBER_LITERAL, "ERR_NUMBER_LITERAL"},
+    {ERR_SYMBOL, "ERR_SYMBOL"},
+    {ERR_CHAR, "ERR_CHAR"},
 };
 
 void Token::print() const
