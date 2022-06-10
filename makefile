@@ -13,7 +13,11 @@ endef
 sources = $(wildcard src/*.cpp)
 objects = $(patsubst %,bin/%.o,$(basename $(notdir $(sources))))
 
-CC = clang++ -std=c++20
+ifeq ($(OS),Windows_NT)
+	CC = clang++ -std=c++20 
+else
+	CC = g++ -std=c++20 
+endif
 SS = @
 obj = bin
 dep_dir = $(obj)/deps
@@ -48,7 +52,7 @@ ifeq ($(OS),Windows_NT)
 	$(SS)del /S /Q bin\*
 	$(SS)rmdir bin\deps bin
 else
-	$(SS)rm bin/*
+	$(SS)rm -rf bin
 endif
 
 ifeq ($(OS),Windows_NT)
@@ -62,5 +66,4 @@ endef
 endif
 
 $(ffl): 
-	echo $@
 	$(call make_dir,$@)
