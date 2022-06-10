@@ -38,8 +38,22 @@ private:
 
 struct Tokenizer
 {
-    Tokenizer(std::fstream &file);
+    Tokenizer(const char *path);
+
+    bool is_open() const;
+
+    auto get_line();
+
     Token nextToken();
+
+    void analyse_line();
+
+private:
+    std::fstream m_file;
+    size_t m_line_pos, m_col_pos;
+    
+    std::string m_current_line;
+    std::deque<Token> m_token_list;
 };
 
 TokenList tokenizer(std::fstream &file);

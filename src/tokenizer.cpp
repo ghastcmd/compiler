@@ -69,12 +69,12 @@ const std::vector<std::pair<std::regex, enum TokenCategory>> reg_list_complement
     {std::regex("^\'[^']*\'"), ERR_CHAR},
 };
 
+std::regex reg_comment("^//");
+std::regex reg_white_space("^ ");
+
 TokenList tokenizer(std::fstream &file)
 {
     std::deque<Token> token_list;
-
-    std::regex reg_comment ("^//");
-    std::regex reg_white_space ("^ ");
 
     std::string current_line;
     size_t line_pos, col_pos;
@@ -143,4 +143,113 @@ TokenList tokenizer(std::fstream &file)
 
     token_list.push_back({END_OF_FILE, line_pos-1, col_pos, std::string("")});
     return {token_list};
+}
+
+Tokenizer::Tokenizer(const char *path)
+    : m_file(path), m_line_pos(0), m_col_pos(0)
+{
+}
+
+bool Tokenizer::is_open() const
+{
+    if (!m_file.is_open())
+    {
+        std::cerr << "File does not exits.\n Exiting...\n";
+        return false;
+    }
+    return true;
+}
+
+auto Tokenizer::get_line()
+{
+    std::getline(m_file, m_current_line);
+    if (m_file.eof())
+    {
+        return false;
+    }
+    return true;
+}
+
+Token Tokenizer::nextToken()
+{
+    if (m_token_list.size() == 0)
+    {
+        analyse_line();
+    }
+    const auto token = m_token_list.front();
+    if (token.cat() != END_OF_FILE)
+    {
+        m_token_list.erase(m_token_list.begin());
+    }
+    return token;
+}
+
+void Tokenizer::analyse_line()
+{
+    if (!get_line())
+    {
+        m_token_list.push_back({END_OF_FILE, m_line_pos - 1, m_col_pos, std::string("")});
+    }
+
+    printf("%4d  %s\n", (int)m_line_pos, m_current_line.c_str());
+
+    size_t max_lenght;
+    for (m_col_pos = 0, max_lenght = m_current_line.length(); m_col_pos < max_lenght; m_col_pos++)
+    {
+        std::cmatch matches;
+
+        std::regex_search(&m_current_line[m_col_pos], matches, reg_comment);
+        if (!matches.empty())
+        {
+            break;
+        }
+
+        std::regex_search(&m_current_line[m_col_pos], matches, reg_white_space);
+        if (!matches.empty())
+        {
+            continue;
+        }
+        
+        bool found = false;
+
+        for (const auto &[reg_val, cat] : reg_list_words)
+        {
+            std::regex_search(&m_current_line[m_col_pos], matches, reg_val);
+            if (!matches.empty())
+            {
+                size_t match_size = matches.str(0).size() - 2;
+                m_token_list.push_back({cat, m_line_pos, m_col_pos, matches.str(0).substr(0, match_size+1)});
+                m_col_pos += match_size;
+
+                found = true;
+                break;
+            }
+        }
+
+        if (found) continue;
+
+        for (const auto &[reg_val, cat] : reg_list_complement)
+        {
+            std::regex_search(&m_current_line[m_col_pos], matches, reg_val);
+            if (!matches.empty())
+            {
+                size_t match_size = matches.str(0).size() - 1;
+                m_token_list.push_back({cat, m_line_pos, m_col_pos, matches.str(0)});
+                m_col_pos += match_size;
+
+                found = true;
+                break;
+            }
+        }
+
+        if (found) continue;
+
+        { // if no strings matches
+            std::string to_insert (1, m_current_line[m_col_pos]);
+            m_token_list.push_back({ERR_SYMBOL, m_line_pos, m_col_pos, to_insert});
+            m_col_pos += 1;
+        }
+    }
+
+    m_line_pos += 1;
 }
